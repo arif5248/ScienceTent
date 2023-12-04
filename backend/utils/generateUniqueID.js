@@ -54,10 +54,10 @@ exports.generateUniqueID = catchAsyncError(async (req, res, next) => {
       }
     );
 
-    await sendSMS({
-      number: student.whatsappNumber,
-      message: `Dear ${student.name}, Your Registration is Approved. Your Student ID is ${student.studentID} From: Science Tent( ${batch.branch} Branch )`,
-    });
+    // await sendSMS({
+    //   number: student.whatsappNumber,
+    //   message: `Dear ${student.name}, Your Registration is Approved. Your Student ID is ${student.studentID} From: Science Tent( ${batch.branch} Branch )`,
+    // });
 
     res.status(200).json({ success: true, student });
   } catch (error) {

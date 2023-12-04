@@ -1,8 +1,13 @@
 const ErrorHandler = require("../utils/errorhander");
 const catchAsyncError = require("../middleware/catchAsyncError");
 const Students = require("../models/studentModel");
+const Courses = require("../models/courseModel");
 
 exports.registerStudent = catchAsyncError(async (req, res, next) => {
+  const registeredStudent = await Students.find({ user: req.user._id });
+  if (registeredStudent.length !== 0) {
+    return next(new ErrorHandler("You are already registered this form", 400));
+  }
   const user = req.user.id;
   const {
     name,
@@ -13,9 +18,19 @@ exports.registerStudent = catchAsyncError(async (req, res, next) => {
     collegeName,
     address,
     batch,
-    enrolledSubject,
+    enrolledCourses,
     guardianInfo,
   } = req.body;
+
+  const courseDetails = await Promise.all(
+    enrolledCourses.map(async (course) => {
+      const courseDetails = await Courses.findById(course.courseID);
+      return {
+        courseID: courseDetails._id,
+        name: courseDetails.name,
+      };
+    })
+  );
 
   const student = await Students.create({
     user,
@@ -27,9 +42,10 @@ exports.registerStudent = catchAsyncError(async (req, res, next) => {
     collegeName,
     address,
     batch,
-    enrolledSubject,
+    enrolledCourses: courseDetails,
     guardianInfo,
   });
+
   res.status(200).json({ success: true, student });
 });
 

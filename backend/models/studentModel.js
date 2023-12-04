@@ -55,21 +55,17 @@ const studentsSchema = new mongoose.Schema({
     ref: "Batches",
     required: true,
   },
-  enrolledSubject: [
+  enrolledCourses: [
     {
-      subjectName: {
+      courseID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Courses",
+        required: true,
+      },
+      name: {
         type: String,
         required: [true, "Please enroll atleast one subject"],
       },
-      numOfClass: { type: Number, default: 0, required: true },
-      paymentPerClass: { type: Number, default: 0, required: true },
-      totalPaymentForClass: { type: Number, default: 0, required: true },
-      class: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Classes",
-        },
-      ],
     },
   ],
   guardianInfo: {
@@ -108,6 +104,17 @@ const studentsSchema = new mongoose.Schema({
     type: String,
     default: "Payment not Completed",
   },
+  allClasses: [
+    {
+      class: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Classes",
+      },
+      name: {
+        type: String,
+      },
+    },
+  ],
   status: {
     type: String,
     enum: ["pending", "approved", "rejected"],
