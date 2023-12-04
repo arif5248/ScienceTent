@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const app = express();
 const cookieParser = require("cookie-parser");
 const cron = require("node-cron");
@@ -24,6 +25,11 @@ app.use("/api/v1", course);
 app.use("/api/v1", student);
 app.use("/api/v1", classDetails);
 app.use("/api/v1", notification);
+
+app.use(express.static(path.join(__dirname, "../frontend/build")));
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../frontend/build/index.html"));
+});
 
 cron.schedule(
   "0 0 * * *",
