@@ -10,11 +10,11 @@
     {
       "src": "/api/upload",
       "methods": ["POST"],
-      "dest": "your-app-directory/upload.js"
+      "dest": "./backend/upload.js"
     },
     {
       "src": "/(.*)",
-      "dest": "your-app-directory/index.js"
+      "dest": "./backend/index.js"
     }
   ]
 }
