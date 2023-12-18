@@ -6,17 +6,15 @@ import Navbar from "react-bootstrap/Navbar";
 import Dropdown from "react-bootstrap/Dropdown";
 import "./header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faSearch,
-  faUser,
-  faShoppingCart,
-} from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { faSearch, faUser } from "@fortawesome/free-solid-svg-icons";
+import { Link, useNavigate } from "react-router-dom";
 import { fetchUserLogout } from "../../../slice/userSlice";
-import Loader from "../../loader/loader";
+import Loader from "../loader/loader";
+import logo from "../../../images/logo/STlogo.png";
 
 function Header() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { isLoading, user } = useSelector((state) => state.user);
 
   const [showDropdown, setShowDropdown] = useState(false);
@@ -28,6 +26,7 @@ function Header() {
 
   const userLogout = () => {
     dispatch(fetchUserLogout());
+    navigate("/");
     setShowLogoutAlert(true);
     setTimeout(() => setShowLogoutAlert(false), 3000);
   };
@@ -41,7 +40,7 @@ function Header() {
           <Navbar className="navBar my-text" expand="lg">
             <Container>
               <Navbar.Brand as={Link} to="/" className="nab-brand my-text">
-                TradeE<span>.</span>
+                <img src={logo} alt="ScienceTent" className="logo" />
               </Navbar.Brand>
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
@@ -49,8 +48,8 @@ function Header() {
                   <Nav.Link as={Link} to="/">
                     Home
                   </Nav.Link>
-                  <Nav.Link as={Link} to="/products">
-                    Products
+                  <Nav.Link as={Link} to="/blog">
+                    Blogs
                   </Nav.Link>
                   <Nav.Link as={Link} to="/about-us">
                     About Us
@@ -97,9 +96,6 @@ function Header() {
                     <FontAwesomeIcon icon={faUser} />
                   </Nav.Link>
                 )}
-                <Nav.Link as={Link} to="/cart">
-                  <FontAwesomeIcon icon={faShoppingCart} />
-                </Nav.Link>
               </div>
             </Container>
           </Navbar>

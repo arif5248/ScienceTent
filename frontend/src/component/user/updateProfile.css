@@ -18,6 +18,18 @@
   box-sizing: border-box;
   overflow: hidden;
 }
+.update-error-message {
+  position: relative;
+}
+.update-error-message > p {
+  font-size: 12px;
+}
+.update-error-message > .close-btn {
+  font-size: 10px;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
 
 .updateProfileHeading {
   text-align: center;

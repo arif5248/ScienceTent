@@ -1,12 +1,16 @@
 .navBar {
-  padding: 15px 0px !important;
-  background-color: #3b5d50;
+  /* padding: 15px 0px !important; */
+  background-color: #016c81;
 }
 .nab-brand {
   width: 20%;
   color: white !important;
   font-size: 32px !important;
   font-weight: 600;
+}
+.logo {
+  width: 100%;
+  height: auto;
 }
 .nab-brand > span {
   font-weight: 900;

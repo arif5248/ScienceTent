@@ -25,7 +25,8 @@ const userSchema = new mongoose.Schema({
       },
       message: (props) => `${props.value} is not a valid phone number!`,
     },
-    required: [true, "Please Enter your Mobile Number"],
+    default: "pending",
+    enum: ["pending", "approved"],
     unique: true,
   },
   password: {
@@ -38,11 +39,11 @@ const userSchema = new mongoose.Schema({
     public_id: {
       type: String,
       required: true,
-      default: "This Sample id",
+      default: "",
     },
     url: {
       type: String,
-      default: "../../frontend/src/images/user.png",
+      default: "",
     },
   },
   studentRef: {

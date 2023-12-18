@@ -10,6 +10,15 @@
   top: 0%;
   left: 0;
 }
+.error-message {
+  border: 1px solid #ff000080;
+  text-align: center;
+  padding: 5px 0px;
+  color: red;
+}
+.error-message > p {
+  margin: 0px;
+}
 
 .LoginSignUpBox {
   background-color: white;

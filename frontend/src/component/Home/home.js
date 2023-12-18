@@ -8,6 +8,7 @@ function Home() {
     <Fragment>
       <div>Science Tent</div>
       <Link to={"/login"}>Login or Sign Up</Link>
+      <div className="btn btn-primary">hello</div>
     </Fragment>
   );
 }

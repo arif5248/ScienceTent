@@ -1,16 +1,12 @@
 import React, { Fragment, useEffect, useState } from "react";
 import "./updateProfile.css";
-import Loader from "../loader/loader";
+import Loader from "../layout/loader/loader";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import MetaData from "../layout/metaData/metaData";
 import { fetchUserUpdateProfile, reset } from "../../slice/userProfileslice";
 import { fetchLoadUser } from "../../slice/userSlice";
 import ProfilePng from "../../images/user.png";
-
-// import MailOutlineIcon from "@mui/icons-material/MailOutline";
-// import LockOpenIcon from "@mui/icons-material/LockOpen";
-// import FaceIcon from "@mui/icons-material/Face";
 
 const UpdateProfile = () => {
   const dispatch = useDispatch();
@@ -22,29 +18,35 @@ const UpdateProfile = () => {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [avatar, setAvatar] = useState();
-  const [avatarPreview, setAvatarPreview] = useState(ProfilePng);
+  const [avatar, setAvatar] = useState("");
+  const [avatarPreview, setAvatarPreview] = useState(
+    user.avatar.url === "" ? ProfilePng : user.avatar.url
+  );
 
   const updateProfileSubmit = (e) => {
     e.preventDefault();
 
     const myForm = new FormData();
+    myForm.append("name", name);
+    myForm.append("email", email);
+    myForm.append("avatar", avatar);
 
-    myForm.set("name", name);
-    myForm.set("email", email);
-    myForm.set("avatar", avatar);
     dispatch(fetchUserUpdateProfile(myForm));
   };
 
   const UpdateProfileDataChange = (e) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setAvatarPreview(reader.result);
-        setAvatar(reader.result);
-      }
-    };
-    reader.readAsDataURL(e.target.files[0]);
+    const file = e.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setAvatar(reader.result);
+          setAvatarPreview(reader.result);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   useEffect(() => {
@@ -54,7 +56,7 @@ const UpdateProfile = () => {
       setAvatar(user.avatar.url);
     }
     if (error) {
-      console.error();
+      console.error(error);
     }
 
     if (isUpdated) {
@@ -77,6 +79,16 @@ const UpdateProfile = () => {
               <MetaData title="Update Profile" />
               <div className="updateProfileContainer">
                 <div className="updateProfileBox">
+                  {error && (
+                    <div className="error-message update-error-message">
+                      <p>
+                        Failed to Update your profile. Maybe it happened to your
+                        image size. Please try again with less than 1MB image
+                        size or contact Admin.
+                      </p>
+                      <div className="btn btn-danger close-btn">X</div>
+                    </div>
+                  )}
                   <h2 className="updateProfileHeading">Update Profile</h2>
                   <form
                     className="updateProfileForm"
@@ -84,7 +96,6 @@ const UpdateProfile = () => {
                     onSubmit={updateProfileSubmit}
                   >
                     <div className="updateProfileName">
-                      {/* <FaceIcon /> */}
                       <input
                         type="text"
                         placeholder="Name"
@@ -96,7 +107,6 @@ const UpdateProfile = () => {
                     </div>
 
                     <div className="updateProfileEmail">
-                      {/* <MailOutlineIcon /> */}
                       <input
                         type="email"
                         placeholder="Email"
@@ -109,7 +119,6 @@ const UpdateProfile = () => {
 
                     <div id="updateProfileImage">
                       <img src={avatarPreview} alt="Avatar Preview" />
-                      {/* <LockOpenIcon /> */}
                       <input
                         type="file"
                         name="avatar"
@@ -122,7 +131,6 @@ const UpdateProfile = () => {
                       type="submit"
                       value="Update"
                       className="updateProfileBtn"
-                      //   disabled={loading ? true : false}
                     />
                   </form>
                 </div>

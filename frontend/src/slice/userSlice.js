@@ -14,14 +14,17 @@ export const fetchUserRegister = createAsyncThunk(
 export const fetchUserLogin = createAsyncThunk(
   "user/fetchUserLogin",
   async ({ email, password }) => {
-    const config = { headers: { "Content-Type": "application/json" } };
-
-    const { data } = await axios.post(
-      `/api/v1/login`,
-      { email, password },
-      config
-    );
-    return data;
+    try {
+      const config = { headers: { "Content-Type": "application/json" } };
+      const { data } = await axios.post(
+        `/api/v1/login`,
+        { email, password },
+        config
+      );
+      return data;
+    } catch (error) {
+      throw error.response.data; // Throw the error response data from the backend
+    }
   }
 );
 
@@ -57,6 +60,7 @@ const userSlice = createSlice({
       state.error = null;
     });
     builder.addCase(fetchUserLogin.rejected, (state, action) => {
+      console.log("=======================================", action);
       state.isLoading = false;
       state.isAuthenticated = false;
       state.user = {};
@@ -81,7 +85,7 @@ const userSlice = createSlice({
     builder.addCase(fetchLoadUser.fulfilled, (state, action) => {
       state.isLoading = false;
       state.isAuthenticated = true;
-      state.user = action.payload.user; // Assuming 'user' is a property in the payload
+      state.user = action.payload.user;
       state.error = null;
     });
     builder.addCase(fetchLoadUser.rejected, (state, action) => {
