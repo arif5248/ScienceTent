@@ -9,12 +9,20 @@ const cloudinary = require("cloudinary");
 
 //Register a User
 exports.registerUser = catchAsyncError(async (req, res, next) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, mobile } = req.body;
 
+  if(mobile){
+    const existUser = await User.findOne({ "mobile.mobileNumber": mobile.mobileNumber})
+    console.log(mobile.mobileNumber)
+    if(existUser){
+      return next(new ErrorHandler("This mobile is already used. Try another one", 401));
+    }
+  }
   const user = await User.create({
     name,
     email,
     password,
+    mobile
   });
   sendToken(user, 201, res);
 });

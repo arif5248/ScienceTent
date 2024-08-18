@@ -61,9 +61,9 @@ function Header() {
               </Navbar.Collapse>
 
               <div className="nav-icon-box">
-                <Nav.Link as={Link} to="/search">
+                {/* <Nav.Link as={Link} to="/search">
                   <FontAwesomeIcon icon={faSearch} />
-                </Nav.Link>
+                </Nav.Link> */}
                 {user ? (
                   <Nav.Link as={Link} to="/login">
                     <div className="user-icon" onMouseOver={onMouseOver}>

@@ -18,17 +18,25 @@ const userSchema = new mongoose.Schema({
     validate: [validator.isEmail, "Please Enter a valid Email"],
   },
   mobile: {
-    type: String,
-    validate: {
-      validator: function (v) {
-        return /\d{11}/.test(v);
+    mobileNumber: {
+      type: String,
+      validate: {
+        validator: function (v) {
+          // Validate only if mobileNumber is provided
+          return !v || /\d{11}/.test(v);
+        },
+        message: (props) => `${props.value} is not a valid phone number!`,
       },
-      message: (props) => `${props.value} is not a valid phone number!`,
+      default: "", // Allow mobileNumber to be empty or null
     },
-    default: "pending",
-    enum: ["pending", "approved"],
-    unique: true,
+    isApproved: {
+      type: String,
+      default: "pending",
+      enum: ["pending", "approved"],
+    },
   },
+  
+  
   password: {
     type: String,
     required: [true, "Please Enter your Password"],
@@ -38,7 +46,6 @@ const userSchema = new mongoose.Schema({
   avatar: {
     public_id: {
       type: String,
-      required: true,
       default: "",
     },
     url: {
@@ -53,8 +60,12 @@ const userSchema = new mongoose.Schema({
   role: {
     type: String,
     default: "user",
-    enum: ["user", "student", "teacher"],
+    enum: ["masterAdmin", "admin", "moderator", "user", "student", "teacher", "exStudent"],
   },
+  permissions: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Permissions',
+  }], 
   batch: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Batches",
@@ -102,5 +113,13 @@ userSchema.methods.getResetPasswordToken = function () {
 
   return resetToken;
 };
+// partial index for the mobile number
+// userSchema.index(
+//   { "mobile.mobileNumber": 1 },
+//   {
+//     unique: true,
+//     partialFilterExpression: { "mobile.mobileNumber": { $exists: true, $ne: "" } },
+//   }
+// );
 
 module.exports = mongoose.model("Users", userSchema);

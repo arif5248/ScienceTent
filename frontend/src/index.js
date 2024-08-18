@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client"; // Update this import
 import App from "./App";
 import { Provider } from "react-redux";
 import store from "./store";
@@ -15,11 +15,14 @@ const options = {
   transition: transitions.SCALE,
 };
 
-ReactDOM.render(
+// Create a root container using createRoot
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+// Use the render method of the root object
+root.render(
   <Provider store={store}>
     <AlertProvider template={AlertTemplate} {...options}>
       <App />
     </AlertProvider>
-  </Provider>,
-  document.getElementById("root")
+  </Provider>
 );

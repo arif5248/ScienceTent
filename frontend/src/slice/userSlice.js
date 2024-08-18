@@ -23,7 +23,7 @@ export const fetchUserLogin = createAsyncThunk(
       );
       return data;
     } catch (error) {
-      throw error.response.data; // Throw the error response data from the backend
+      throw error.response.data; 
     }
   }
 );
